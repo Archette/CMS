@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Archette\Blog;
 
+use Archette\CMS\Model\Website\WebsiteFacade;
+use Archette\CMS\Model\Website\WebsiteFactory;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Application\IPresenterFactory;
 use Nette\DI\CompilerExtension;
@@ -36,5 +38,11 @@ class CMSExtension extends CompilerExtension
 				'*',
 				'*\*Presenter']
 		]]);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('websiteFactory'))
+			->setFactory(WebsiteFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('websiteFacade'))
+			->setFactory(WebsiteFacade::class);
 	}
 }
