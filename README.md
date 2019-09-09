@@ -9,5 +9,5 @@ composer require archette/cms
 Add extension to your neon configuration
 ```neon
 extensions:
-    archette.blog: Archette\CMS\DependencyInjection\CMSExtension
+    archette.cms: Archette\CMS\DependencyInjection\CMSExtension
 ```
