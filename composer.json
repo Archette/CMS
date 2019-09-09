@@ -10,5 +10,14 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "rixafy/blog": "dev-master",
+        "nette/application": "^3.0",
+        "nette/di": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Archette\\CMS\\": "src"
+        }
+    }
 }
