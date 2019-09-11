@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Archette\Blog;
+namespace Archette\CMS;
 
 use Affilix\CMS\Router\RouterFactory;
 use Archette\CMS\Model\Website\WebsiteFacade;
