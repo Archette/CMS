@@ -28,15 +28,11 @@ class CMSExtension extends CompilerExtension
 		$presenterServiceDefinition = $builder->getDefinitionByType(IPresenterFactory::class);
 
 		$presenterServiceDefinition->addSetup('setMapping', [[
-			'Admin' => [
-				'Archette\\Module\\Admin',
+			'CMS' => [
+				'Archette\\Module',
 				'*',
 				'*\*Presenter'
-			],
-			'Front' => [
-				'Archette\\Module\\Front',
-				'*',
-				'*\*Presenter']
+			]
 		]]);
 
 		$this->getContainerBuilder()->addDefinition($this->prefix('websiteFactory'))
