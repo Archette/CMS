@@ -11,6 +11,21 @@ use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Application\IPresenterFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
+use Rixafy\Blog\BlogFacade;
+use Rixafy\Blog\BlogFactory;
+use Rixafy\Blog\Category\BlogCategoryFacade;
+use Rixafy\Blog\Category\BlogCategoryFactory;
+use Rixafy\Blog\Post\BlogPostFacade;
+use Rixafy\Blog\Post\BlogPostFactory;
+use Rixafy\Blog\Publisher\BlogPublisherFacade;
+use Rixafy\Blog\Publisher\BlogPublisherFactory;
+use Rixafy\Blog\Tag\BlogTagFacade;
+use Rixafy\Blog\Tag\BlogTagFactory;
+use Rixafy\Language\Command\LanguageUpdateCommand;
+use Rixafy\Language\LanguageFacade;
+use Rixafy\Language\LanguageFactory;
+use Rixafy\Language\LanguageProvider;
+use Rixafy\Language\LanguageRepository;
 use Rixafy\Routing\Route\Group\RouteGroupFacade;
 use Rixafy\Routing\Route\Group\RouteGroupFactory;
 use Rixafy\Routing\Route\Group\RouteGroupRepository;
@@ -28,11 +43,16 @@ class CMSExtension extends CompilerExtension
 		/** @var ServiceDefinition $serviceDefinition */
 		$serviceDefinition = $this->getContainerBuilder()->getDefinitionByType(AnnotationDriver::class);
 		$serviceDefinition->addSetup('addPaths', [['vendor/archette/cms']]);
+		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/blog']]);
+		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/routing']]);
+		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/language']]);
 	}
 
 	public function loadConfiguration(): void
 	{
+		$this->loadLanguageExtension();
 		$this->loadRoutingExtension();
+		$this->loadBlogExtension();
 
 		$builder = $this->getContainerBuilder();
 
@@ -88,5 +108,58 @@ class CMSExtension extends CompilerExtension
 
 		$this->getContainerBuilder()->addDefinition($this->prefix('routeSiteFactory'))
 			->setFactory(RouteSiteFactory::class);
+	}
+
+	private function loadBlogExtension(): void
+	{
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogFacade'))
+			->setFactory(BlogFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogPostFacade'))
+			->setFactory(BlogPostFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogTagFacade'))
+			->setFactory(BlogTagFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogPublisherFacade'))
+			->setFactory(BlogPublisherFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogCategoryFacade'))
+			->setFactory(BlogCategoryFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogFactory'))
+			->setFactory(BlogFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogPublisherFactory'))
+			->setFactory(BlogPublisherFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogCategoryFactory'))
+			->setFactory(BlogCategoryFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogTagFactory'))
+			->setFactory(BlogTagFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('blogPostFactory'))
+			->setFactory(BlogPostFactory::class);
+	}
+
+	private function loadLanguageExtension(): void
+	{
+		$this->getContainerBuilder()->addDefinition($this->prefix('languageFacade'))
+			->setFactory(LanguageFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('languageRepository'))
+			->setFactory(LanguageRepository::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('languageFactory'))
+			->setFactory(LanguageFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('languageProvider'))
+			->setFactory(LanguageProvider::class)
+			->addSetup('provide', [$this->config->defaultLanguage]);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('languageUpdateCommand'))
+			->setFactory(LanguageUpdateCommand::class)
+			->addTag('console.command', 'rixafy:language:update');
 	}
 }
