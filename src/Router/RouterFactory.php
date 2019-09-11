@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Affilix\CMS\Router;
+namespace Archette\CMS\Router;
 
 use Nette\Application\Routers\RouteList;
 use Nette\Application\UI\Presenter;

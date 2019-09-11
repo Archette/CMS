@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Archette\CMS\DependencyInjection;
 
-use Affilix\CMS\Router\RouterFactory;
 use Archette\CMS\Model\Website\WebsiteFacade;
 use Archette\CMS\Model\Website\WebsiteFactory;
+use Archette\CMS\Router\RouterFactory;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Nette\Application\IPresenterFactory;
 use Nette\DI\CompilerExtension;
