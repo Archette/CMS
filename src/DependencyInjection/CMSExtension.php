@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Archette\Blog;
 
+use Affilix\CMS\Router\RouterFactory;
 use Archette\CMS\Model\Website\WebsiteFacade;
 use Archette\CMS\Model\Website\WebsiteFactory;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
@@ -40,5 +41,11 @@ class CMSExtension extends CompilerExtension
 
 		$this->getContainerBuilder()->addDefinition($this->prefix('websiteFacade'))
 			->setFactory(WebsiteFacade::class);
+
+		$this->getContainerBuilder()->addDefinition('routerFactory')
+			->setFactory(RouterFactory::class);
+
+		$this->getContainerBuilder()->addDefinition('router')
+			->setFactory('@routerFactory::create');
 	}
 }
