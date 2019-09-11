@@ -21,6 +21,13 @@ use Rixafy\Blog\Publisher\BlogPublisherFacade;
 use Rixafy\Blog\Publisher\BlogPublisherFactory;
 use Rixafy\Blog\Tag\BlogTagFacade;
 use Rixafy\Blog\Tag\BlogTagFactory;
+use Rixafy\Country\CountryFacade;
+use Rixafy\Country\CountryFactory;
+use Rixafy\Country\CountryRepository;
+use Rixafy\IpAddress\IpAddressFacade;
+use Rixafy\IpAddress\IpAddressFactory;
+use Rixafy\IpAddress\IpAddressRepository;
+use Rixafy\IpAddress\IpAddressResolver;
 use Rixafy\Language\Command\LanguageUpdateCommand;
 use Rixafy\Language\LanguageFacade;
 use Rixafy\Language\LanguageFactory;
@@ -46,6 +53,9 @@ class CMSExtension extends CompilerExtension
 		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/blog']]);
 		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/routing']]);
 		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/language']]);
+		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/ip-address']]);
+		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/currency']]);
+		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/country']]);
 	}
 
 	public function loadConfiguration(): void
@@ -53,6 +63,8 @@ class CMSExtension extends CompilerExtension
 		$this->loadLanguageExtension();
 		$this->loadRoutingExtension();
 		$this->loadBlogExtension();
+		$this->loadCountryExtension();
+		$this->loadIpAddressExtension();
 
 		$builder = $this->getContainerBuilder();
 
@@ -161,5 +173,32 @@ class CMSExtension extends CompilerExtension
 		$this->getContainerBuilder()->addDefinition($this->prefix('languageUpdateCommand'))
 			->setFactory(LanguageUpdateCommand::class)
 			->addTag('console.command', 'rixafy:language:update');
+	}
+
+	private function loadIpAddressExtension(): void
+	{
+		$this->getContainerBuilder()->addDefinition($this->prefix('ipAddressFactory'))
+			->setFactory(IpAddressFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('ipAddressRepository'))
+			->setFactory(IpAddressRepository::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('ipAddressFacade'))
+			->setFactory(IpAddressFacade::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('ipAddressResolver'))
+			->setFactory(IpAddressResolver::class);
+	}
+
+	private function loadCountryExtension(): void
+	{
+		$this->getContainerBuilder()->addDefinition($this->prefix('countryFactory'))
+			->setFactory(CountryFactory::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('countryRepository'))
+			->setFactory(CountryRepository::class);
+
+		$this->getContainerBuilder()->addDefinition($this->prefix('countryFacade'))
+			->setFactory(CountryFacade::class);
 	}
 }

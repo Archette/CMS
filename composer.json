@@ -12,6 +12,10 @@
     "minimum-stability": "dev",
     "require": {
         "rixafy/blog": "dev-master",
+        "rixafy/ip-address": "dev-master",
+        "rixafy/country": "dev-master",
+        "rixafy/routing": "dev-master",
+        "rixafy/currency": "dev-master",
         "nette/application": "^3.0",
         "nette/di": "^3.0",
         "symfony/event-dispatcher": "^4.3.1"
