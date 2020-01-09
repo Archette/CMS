@@ -7,7 +7,7 @@ namespace Archette\CMS\DependencyInjection;
 use Archette\CMS\Model\Website\WebsiteFacade;
 use Archette\CMS\Model\Website\WebsiteFactory;
 use Archette\CMS\Router\RouterFactory;
-use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Nette\Application\IPresenterFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\ServiceDefinition;
@@ -48,7 +48,7 @@ class CMSExtension extends CompilerExtension
 	public function beforeCompile(): void
 	{
 		/** @var ServiceDefinition $serviceDefinition */
-		$serviceDefinition = $this->getContainerBuilder()->getDefinitionByType(AnnotationDriver::class);
+		$serviceDefinition = $this->getContainerBuilder()->getDefinitionByType(MappingDriver::class);
 		$serviceDefinition->addSetup('addPaths', [['vendor/archette/cms']]);
 		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/blog']]);
 		$serviceDefinition->addSetup('addPaths', [['vendor/rixafy/routing']]);
@@ -168,7 +168,7 @@ class CMSExtension extends CompilerExtension
 
 		$this->getContainerBuilder()->addDefinition($this->prefix('languageProvider'))
 			->setFactory(LanguageProvider::class)
-			->addSetup('provide', [$this->config->defaultLanguage]);
+			->addSetup('provide', ['en']);
 
 		$this->getContainerBuilder()->addDefinition($this->prefix('languageUpdateCommand'))
 			->setFactory(LanguageUpdateCommand::class)
